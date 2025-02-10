@@ -2,9 +2,9 @@
 ## Implementation:
 ### Data Storage
 Potentially store user data in Google Sheets (same as the Form) or Firestore (more robust).
-####Technology Stack
+### Technology Stack
 Written in Python (using a Discord library like discord.py forks, PyCord, or Nextcord).
-Hosting
+### Hosting
 Hosted somewhere it can stay online 24/7 (e.g., Replit, Railway.app).
 
 ## Features:
