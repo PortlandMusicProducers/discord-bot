@@ -7,7 +7,7 @@ After specified days (time since unverified user joined) bot takes action:
 
 Bot reminds them to complete two tasks:
 Post an introduction in #introduce-yourself.
-Fill out a Google Form (results of which go to Google Sheets).
+Fill out a Google Form.
 
 Communication Method
 DM if possible (it won’t go through for people who don’t allow DM’s from strangers), and tag them in a #verification channel.
