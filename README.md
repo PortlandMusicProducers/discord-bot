@@ -13,7 +13,7 @@ Communication Method
 DM if possible (it won’t go through for people who don’t allow DM’s from strangers), and tag them in a #verification channel.
 
 ### Priority 2
-Once deadline has expired, ask admins for final approval to kick.
+Once deadline has expired, ask admins for final approval to kick?
 
 ### Priority 3
 Bot grants user verified “member” role if both requirements are done.
