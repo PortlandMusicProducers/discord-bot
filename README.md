@@ -1,12 +1,4 @@
 # Portland Music Producers Discord Bot Scope
-## Implementation:
-### Data Storage
-Potentially store user data in Google Sheets (same as the Form) or Firestore (more robust).
-### Technology Stack
-Written in Python (using a Discord library like discord.py forks, PyCord, or Nextcord).
-### Hosting
-Hosted somewhere it can stay online 24/7 (e.g., Replit, Railway.app).
-
 ## Features:
 ### Priority 1
 All new members get an “Unverified” role automatically.
@@ -25,4 +17,12 @@ Once deadline has expired, ask admins for final approval to kick.
 
 ### Priority 3
 Bot grants user verified “member” role if both requirements are done.
+
+## Implementation Options:
+### Data Storage
+Potentially store user data in Google Sheets (same as the Form) or Firestore (more robust).
+### Technology Stack
+Written in Python (using a Discord library like discord.py forks, PyCord, or Nextcord).
+### Hosting
+Hosted somewhere it can stay online 24/7 (e.g., Replit, Railway.app).
 
