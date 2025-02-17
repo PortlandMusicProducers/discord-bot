@@ -51,7 +51,7 @@ class PMPAdmin(commands.Cog):
             intro_status = "✅" if intro_posted else "❌"
             message += f"📌 {member.name} - **{days_in_server} days** in server | Intro: {intro_status}\n"
 
-        ctx.send(message)
+        await ctx.send(message)
 
     @commands.command()
     async def alertUnverified(self, ctx):
