@@ -1,0 +1,9 @@
+{
+    "author": ["error454"],
+    "description": "PMP Verification reporting, reminding and kicking",
+    "min_bot_version": "3.5.0",
+    "short": "PMP Admin",
+    "tags": ["report", "remind", "kick"],
+    "type": "COG",
+    "end_user_data_statement": ""
+}
