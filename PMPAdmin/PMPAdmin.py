@@ -2,33 +2,53 @@ import discord
 from redbot.core import commands
 from datetime import datetime, timezone
 from collections import defaultdict
-
-UNVERIFIED_ROLE_ID = 1335740367026262128
-INTRO_CHANNEL_ID = 1173461536031907962
-REMINDER_CHANNEL_ID = 1340411672170336398
-DM_MESSAGE = "A heartfelt DM message that inspires user."
+from messages import *
 
 def getUnverifiedMembers(guild):
-    """Returns a list of unverified members and their days in the server."""
+    """Returns a list of unverified members and the number of days they've been in the server."""
     now = discord.utils.utcnow()
     unverified_members = []
 
     for member in guild.members:
-        if any(role.id == UNVERIFIED_ROLE_ID for role in member.roles):
+        if any(role.id == ROLE_ID_UNVERIFIED for role in member.roles):
             days_in_server = (now - member.joined_at).days if member.joined_at else 0
             unverified_members.append((member, days_in_server))
 
     # Sort by days in server (oldest first)
     return sorted(unverified_members, key=lambda x: x[1], reverse=True)
 
+def getDMMessageNumberVarName(days_remaining):
+    if days_remaining >= 5:
+        return "DM_MESSAGE_5"
+    elif days_remaining == 4:
+        return "DM_MESSAGE_4"
+    elif days_remaining == 3:
+        return "DM_MESSAGE_3"
+    elif days_remaining == 2:
+        return "DM_MESSAGE_2"
+    elif days_remaining <= 1:
+        return "DM_MESSAGE_1"
+    
+def getDMMessageNumber(days_remaining):
+    if days_remaining >= 5:
+        return DM_MESSAGE_5
+    elif days_remaining == 4:
+        return DM_MESSAGE_4
+    elif days_remaining == 3:
+        return DM_MESSAGE_3
+    elif days_remaining == 2:
+        return DM_MESSAGE_2
+    elif days_remaining <= 1:
+        return DM_MESSAGE_1
+    
 class PMPAdmin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
     async def reportUnverified(self, ctx):
-        """List unverified users and how long they've been in the server and whether they have posted in the intro channel."""
-        intro_channel = ctx.guild.get_channel(INTRO_CHANNEL_ID)
+        """List all unverified users and how long they've been in the server and whether they have posted in the intro channel."""
+        intro_channel = ctx.guild.get_channel(CHANNEL_ID_INTRO)
 
         if not intro_channel:
             return await ctx.send("❌ **Introductions channel not found!**")
@@ -55,8 +75,8 @@ class PMPAdmin(commands.Cog):
 
     @commands.command()
     async def alertUnverified(self, ctx):
-        """Posts a reminder for unverified members."""
-        channel = self.bot.get_channel(REMINDER_CHANNEL_ID)
+        """Posts a reminder for all unverified members inside of the reminder channel."""
+        channel = self.bot.get_channel(CHANNEL_ID_REMINDER)
         if not channel:
             await ctx.send("⚠️ Error: Could not find the alert channel.")
             return
@@ -67,18 +87,19 @@ class PMPAdmin(commands.Cog):
             await channel.send("✅ No unverified members to remind!")
             return
 
-        message = "**🔔 Reminder for Unverified Members:**\nTODO TODO\n"
+        message = UNVERIFIED_MESSAGE + "\n"
         simulated_dms = ""
 
         for member, days_in_server in unverified_members:
             days_remaining = max(0, 5 - days_in_server)  # Countdown from 5 days
-            message += f"📌 {member.mention} - **{days_remaining} days remaining to get verified**\n"
+            message += f"📌 {member.mention} - you have {days_remaining} days remaining to get verified!\n"
 
-            simulated_dms += f"Simulated DM to {member.display_name}: {DM_MESSAGE}'\n"
+            simulated_dms += f"Simulated DM to {member.display_name}: With pre-written message : {getDMMessageNumberVarName(days_remaining)}'\n"
+            
             #DM Each member with a reminder
             '''
             try:
-                await member.send(DM_MESSAGE)
+                await member.send(getDMMessageNumber(days_remaining))
             except discord.Forbidden:
                 await ctx.send(f"⚠️ Could not DM {member.display_name} (DMs closed).")
             '''
@@ -87,10 +108,15 @@ class PMPAdmin(commands.Cog):
         #await channel.send(message)
         await ctx.send(message)
         await ctx.send(f"🔹 **Simulated DMs:**\n```\n{simulated_dms}```")
+        await ctx.send(f"Message: {getDMMessageNumberVarName(5)}\n{getDMMessageNumber(5)}")
+        await ctx.send(f"Message: {getDMMessageNumberVarName(4)}\n{getDMMessageNumber(4)}")
+        await ctx.send(f"Message: {getDMMessageNumberVarName(3)}\n{getDMMessageNumber(3)}")
+        await ctx.send(f"Message: {getDMMessageNumberVarName(2)}\n{getDMMessageNumber(2)}")
+        await ctx.send(f"Message: {getDMMessageNumberVarName(1)}\n{getDMMessageNumber(1)}")
 
     @commands.command()
     @commands.has_permissions(kick_members=True)  # Requires kick permissions
-    async def kickUnverified(self, ctx, days: int = 5):
+    async def kickUnverified(self, ctx, days_max_before_kick: int = 5):
         """Kicks all Unverified users who have been in the server for more than the specified number of days (default: 5)."""
         unverified_members = getUnverifiedMembers(ctx.guild)
 
@@ -100,7 +126,7 @@ class PMPAdmin(commands.Cog):
 
         kicked_members = []
         for member, days_in_server in unverified_members:
-            if days_in_server > days:
+            if days_in_server > days_max_before_kick:
                 try:
                     # await member.kick(reason=f"Unverified for more than {days} days")
                     kicked_members.append(f"{member.display_name} ({days_in_server} days)")
