@@ -1,7 +1,12 @@
 import discord
+import os
+import sys
 from redbot.core import commands
 from datetime import datetime, timezone
 from collections import defaultdict
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from messages import *
 
 def getUnverifiedMembers(guild):
