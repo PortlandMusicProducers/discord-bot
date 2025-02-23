@@ -187,7 +187,7 @@ class PMPAdmin(commands.Cog):
             await channel.send("✅ No unverified members to remind!")
             return
 
-        message = UNVERIFIED_MESSAGE + "\n"
+        message = ""
         simulated_dms = ""
 
         for member, days_in_server in unverified_members:
