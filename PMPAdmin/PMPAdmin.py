@@ -174,7 +174,7 @@ class PMPAdmin(commands.Cog):
             intro_messages.add(message.author.id)  # Store only the user IDs
 
         member_data = []
-        message = "**📝 Unverified Users (Sorted by Join Date):**\n\n"
+        message = f"**📝 Unverified Users (Sorted by Join Date) with DDAY: {DDAY_DATE}:**\n\n"
         days_since_dday = (now - DDAY_DATE).days
 
         for member, join_date in unverified_members:
@@ -183,7 +183,7 @@ class PMPAdmin(commands.Cog):
             intro_status = "✅" if intro_posted else "❌"
             days_in_server = getDaysInServerWithDDAY(now, join_date)
             days_remaining = max(0, 5 - days_in_server) 
-            message += f"📌 {member.name} - **{days_in_server}** days in server | **{days_remaining}** days remaining | Intro: {intro_status}\n"
+            message += f"📌 {member.name} - **{(now - join_date).days}** days in server | **{days_remaining}** days remaining | Intro: {intro_status}\n"
 
         await ctx.send(message)
 
