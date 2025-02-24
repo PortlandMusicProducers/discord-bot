@@ -41,36 +41,43 @@ URL_DISCORD_JOIN = "https://discord.gg/dxBQgPU9Vn"
 #
 # Large-ish Text Messages
 #
-DM_MESSAGE_5 = f"""**Hey there—welcome to Portland Music Producers!**
-This Discord server is the online platform for our community. It is a place to share and grow as producers – together. We’re so glad you found us!
+UNVERIFIED_HEADER = f"""**🔔Unverified Members Reminder:**
+To become a verified member, please:
+1. Fill out our Google Form ({URL_ONBOARDING}).
+2. Post an introduction in <#{CHANNEL_ID_INTRO}>.
 
-Here’s a glimpse of what we’ve got going on:
-* **Weekly Calls** – Every Wednesday at 7p we chat production tips, struggles, and what we’re working on.
+If these steps aren't completed, we'll need to remove you from the server to keep things running smoothly. We hope you'll stick around!"""
+
+DM_MESSAGE_5 = f"""**Hey there—welcome to Portland Music Producers!**
+This Discord server is the online platform for our community. It is a place to share and grow as producers – together. We're so glad you found us!
+
+Here's a glimpse of what we've got going on:
+* **Weekly Calls** – Every Wednesday at 7p we chat production tips, struggles, and what we're working on.
 * **In-Person Meetups** – Every month, at local recording studios.
-* **Collaborations & Challenges** – Join weekly creative <#{CHANNEL_ID_CHALLENGES}>, share song ideas, or remix a fellow member’s track!
+* **Collaborations & Challenges** – Join weekly creative <#{CHANNEL_ID_CHALLENGES}>, share song ideas, or remix a fellow member's track!
 
 **Two Steps to Join the Fun** (Complete within 5 days):
 1. Fill out our welcome form ({URL_ONBOARDING}).
 2. Post your intro in <#{CHANNEL_ID_INTRO}>.
 
-This helps us keep the community filled with folks who are passionate about growing and supporting each other, and gather everyone’s needs so we can offer helpful events, tips, and collabs. We can’t wait to see you dive in!
+This helps us keep the community filled with folks who are passionate about growing and supporting each other, and gather everyone's needs so we can offer helpful events, tips, and collabs. We can't wait to see you dive in!
 ♥ Portland Music Producers ♥"""
 
 DM_MESSAGE_4 = f"""**Hey again!**
-We hope you’re settling in. Just a quick reminder to:
+We hope you're settling in. Just a quick reminder to:
 1. Complete our welcome form  ({URL_ONBOARDING}).
 2. Share a bit about yourself in <#{CHANNEL_ID_INTRO}>.
 
-Once you’re a verified member the locked collaboration & feedback channels will open up for you:
+Once you're a verified member the locked collaboration & feedback channels will open up for you:
 * <#{CHANNEL_ID_PRODUCTION_FEEDBACK}> is a safe space to share WIPs, and get constructive critiques to level up your productions.
 * Each member gets their own <#{CHANNEL_ID_JOURNAL}> as a personal thread to catalog thoughts, materials, and audio snippets. 
 * Got a recent project you can share? Want to learn how to livestream? Make some noise in <#{CHANNEL_ID_BREAKDOWNS}>.
 
-If you have any questions or need help, just let us know. We’re excited to have you on board!
+If you have any questions or need help, just let us know. We're excited to have you on board!
 ♥ Portland Music Producers ♥"""
 
 DM_MESSAGE_3 = f"""**Hey again!**
-It takes vulnerability and trust to share your art. That’s why in Portland Music Producers we care deeply about nurturing a real sense of community.
+It takes vulnerability and trust to share your art. That's why in Portland Music Producers we care deeply about nurturing a real sense of community.
 
 Our goal is that everyone here is a participant.
 
@@ -83,7 +90,7 @@ This is your home now too, so explore, make some noise and have fun!
 
 
 DM_MESSAGE_2 = f"""**Hey there,**
-Time’s nearly up. If you haven’t introduced yourself and filled the form, you’ll be removed after tomorrow. We’d hate to see you miss out on:
+Time's nearly up. If you haven't introduced yourself and filled the form, you'll be removed after tomorrow. We'd hate to see you miss out on:
 * <#{CHANNEL_ID_BUILD_A_BEAT}>: A weekly collab project where everyone can add a layer to a track—great for learning and experimenting!
 * <#{CHANNEL_ID_QOTD}> (Question of the Day): Thought-provoking daily questions help you get to know yourself and each other.
 * <#{CHANNEL_ID_BOOK_CLUB}>: Read and discuss a book that inspires better production and artistry.
@@ -94,12 +101,12 @@ Time’s nearly up. If you haven’t introduced yourself and filled the form, yo
 1. ({URL_ONBOARDING}).
 2. <#{CHANNEL_ID_INTRO}>.
 
-We truly hope you’ll stick around—there’s so much waiting for you in our community!"""
+We truly hope you'll stick around—there's so much waiting for you in our community!"""
 
 DM_MESSAGE_1 = f"""**Hey there,**
-You will be kicked from the server if you don’t complete the 2 verification items (intro + form) today. This is an effort to maintain a space that is engaged, safe, and focused on growth.
+You will be kicked from the server if you don't complete the 2 verification items (intro + form) today. This is an effort to maintain a space that is engaged, safe, and focused on growth.
 
-Thanks for understanding, and we hope you’ll stick around!
+Thanks for understanding, and we hope you'll stick around!
 
 If you feel you have completed the requirements and should be verified, just holler at an @admin and let us know!
 
@@ -202,7 +209,7 @@ class PMPAdmin(commands.Cog):
             return
 
         now = discord.utils.utcnow()
-        message = ""
+        message = UNVERIFIED_HEADER
         simulated_dms = ""
 
         for member, join_date in unverified_members:
