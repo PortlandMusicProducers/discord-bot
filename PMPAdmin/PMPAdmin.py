@@ -2,8 +2,11 @@
 import discord
 from redbot.core import commands
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo 
 from collections import defaultdict
 
+# Define DDAY as Midnight on Feb 24 UTC
+DDAY_DATE = datetime(2025, 2, 24, 0, 0, 0, tzinfo=timezone.utc)
 #
 # ROLE IDs
 #
@@ -111,8 +114,8 @@ def getUnverifiedMembers(guild):
 
     for member in guild.members:
         if any(role.id == ROLE_ID_UNVERIFIED for role in member.roles):
-            days_in_server = (now - member.joined_at).days if member.joined_at else 0
-            unverified_members.append((member, days_in_server))
+            join_date = member.joined_at
+            unverified_members.append((member, join_date))
 
     # Sort by days in server (oldest first)
     return sorted(unverified_members, key=lambda x: x[1], reverse=True)
@@ -140,7 +143,15 @@ def getDMMessageNumber(days_remaining):
         return DM_MESSAGE_2
     elif days_remaining <= 1:
         return DM_MESSAGE_1
-    
+
+def getDaysInServerWithDDAY(now, join_date):
+    days_in_server = 0
+    if join_date < DDAY_DATE:
+        days_in_server = (now - DDAY_DATE).days
+    else:
+        days_in_server = (now - join_date).days
+    return days_in_server
+
 class PMPAdmin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -155,7 +166,7 @@ class PMPAdmin(commands.Cog):
 
         unverified_members = getUnverifiedMembers(ctx.guild)
         
-        now = datetime.now(timezone.utc)
+        now = discord.utils.utcnow()
 
         # Fetch Introductions channel history once and store user IDs in a set
         intro_messages = set()
@@ -164,12 +175,15 @@ class PMPAdmin(commands.Cog):
 
         member_data = []
         message = "**📝 Unverified Users (Sorted by Join Date):**\n\n"
+        days_since_dday = (now - DDAY_DATE).days
 
-        for member, days_in_server in unverified_members:
+        for member, join_date in unverified_members:
             # Check if user has posted in Introductions
             intro_posted = member.id in intro_messages
             intro_status = "✅" if intro_posted else "❌"
-            message += f"📌 {member.name} - **{days_in_server} days** in server | Intro: {intro_status}\n"
+            days_in_server = getDaysInServerWithDDAY(now, join_date)
+            days_remaining = max(0, 5 - days_in_server) 
+            message += f"📌 {member.name} - **{days_in_server}** days in server | **{days_remaining}** days remaining | Intro: {intro_status}\n"
 
         await ctx.send(message)
 
@@ -187,11 +201,13 @@ class PMPAdmin(commands.Cog):
             await channel.send("✅ No unverified members to remind!")
             return
 
+        now = discord.utils.utcnow()
         message = ""
         simulated_dms = ""
 
-        for member, days_in_server in unverified_members:
-            days_remaining = max(0, 5 - days_in_server)  # Countdown from 5 days
+        for member, join_date in unverified_members:
+            days_in_server = getDaysInServerWithDDAY(now, join_date)
+            days_remaining = max(0, 5 - days_in_server)
             message += f"📌 {member.mention} - you have {days_remaining} days remaining to get verified!\n"
 
             simulated_dms += f"Simulated DM to {member.display_name}: With pre-written message: {getDMMessageNumberVarName(days_remaining)}'\n"
@@ -224,11 +240,14 @@ class PMPAdmin(commands.Cog):
             await ctx.send("✅ No unverified members to kick!")
             return
 
+        now = discord.utils.utcnow()
         kicked_members = []
-        for member, days_in_server in unverified_members:
+
+        for member, join_date in unverified_members:
+            days_in_server = getDaysInServerWithDDAY(now, join_date)
             if days_in_server > days_max_before_kick:
                 try:
-                    # await member.kick(reason=f"Unverified for more than {days} days")
+                    # await member.kick(reason=f"Unverified for more than {days_in_server} days")
                     kicked_members.append(f"{member.display_name} ({days_in_server} days)")
                 except discord.Forbidden:
                     await ctx.send(f"⚠️ Could not kick {member.display_name} (missing permissions).")
