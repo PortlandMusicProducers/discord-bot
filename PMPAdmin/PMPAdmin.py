@@ -16,7 +16,8 @@ ROLE_ID_UNVERIFIED = 1335740367026262128
 # Channel IDs
 #
 CHANNEL_ID_INTRO = 1173461536031907962
-CHANNEL_ID_REMINDER = 1340411672170336398 # Console channel for now
+CHANNEL_ID_CONSOLE = 1340411672170336398
+CHANNEL_ID_REMINDER = 1343433464116150373
 CHANNEL_ID_CHALLENGES = 1270947940843651150
 CHANNEL_ID_PRODUCTION_FEEDBACK = 1173461620823961650
 CHANNEL_ID_JOURNAL = 1264661701446598658
@@ -163,6 +164,16 @@ class PMPAdmin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.copmmand():
+    async def simulateMessages(self, ctx):
+        """Prints all of the messages we have to check for formatting"""
+        await ctx.send(UNVERIFIED_HEADER)
+        await ctx.send(f"Message: {getDMMessageNumberVarName(5)}\n{getDMMessageNumber(5)}")
+        await ctx.send(f"Message: {getDMMessageNumberVarName(4)}\n{getDMMessageNumber(4)}")
+        await ctx.send(f"Message: {getDMMessageNumberVarName(3)}\n{getDMMessageNumber(3)}")
+        await ctx.send(f"Message: {getDMMessageNumberVarName(2)}\n{getDMMessageNumber(2)}")
+        await ctx.send(f"Message: {getDMMessageNumberVarName(1)}\n{getDMMessageNumber(1)}")
+
     @commands.command()
     async def reportUnverified(self, ctx):
         """List all unverified users and how long they've been in the server and whether they have posted in the intro channel."""
@@ -197,19 +208,25 @@ class PMPAdmin(commands.Cog):
     @commands.command()
     async def alertUnverified(self, ctx):
         """Posts a reminder for all unverified members inside of the reminder channel."""
-        channel = self.bot.get_channel(CHANNEL_ID_REMINDER)
-        if not channel:
-            await ctx.send("⚠️ Error: Could not find the alert channel.")
+        verification_channel = self.bot.get_channel(CHANNEL_ID_REMINDER)
+        console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
+
+        if not verification_channel:
+            await ctx.send("⚠️ Error: Could not find the verification channel.")
+            return
+    
+        if not console_channel:
+            await ctx.send("⚠️ Error: Could not find the console channel.")
             return
 
         unverified_members = getUnverifiedMembers(ctx.guild)
 
         if not unverified_members:
-            await channel.send("✅ No unverified members to remind!")
+            await console_channel.send("✅ No unverified members to remind!")
             return
 
         now = discord.utils.utcnow()
-        message = UNVERIFIED_HEADER
+        message = UNVERIFIED_HEADER + "\n"
         simulated_dms = ""
 
         for member, join_date in unverified_members:
@@ -217,25 +234,17 @@ class PMPAdmin(commands.Cog):
             days_remaining = max(0, 5 - days_in_server)
             message += f"📌 {member.mention} - you have {days_remaining} days remaining to get verified!\n"
 
-            simulated_dms += f"Simulated DM to {member.display_name}: With pre-written message: {getDMMessageNumberVarName(days_remaining)}'\n"
+            #simulated_dms += f"Simulated DM to {member.display_name}: With pre-written message: {getDMMessageNumberVarName(days_remaining)}'\n"
             
             #DM Each member with a reminder
-            '''
             try:
                 await member.send(getDMMessageNumber(days_remaining))
             except discord.Forbidden:
-                await ctx.send(f"⚠️ Could not DM {member.display_name} (DMs closed).")
-            '''
+                # Let mods know we couldn't DM someone
+                await console_channel.send(f"⚠️ Could not DM {member.display_name} (DMs closed).")
 
-        # Send the message in the alert channel
-        #await channel.send(message)
-        await ctx.send(message)
-        await ctx.send(f"🔹 **Simulated DMs:**\n```\n{simulated_dms}```")
-        await ctx.send(f"Message: {getDMMessageNumberVarName(5)}\n{getDMMessageNumber(5)}")
-        await ctx.send(f"Message: {getDMMessageNumberVarName(4)}\n{getDMMessageNumber(4)}")
-        await ctx.send(f"Message: {getDMMessageNumberVarName(3)}\n{getDMMessageNumber(3)}")
-        await ctx.send(f"Message: {getDMMessageNumberVarName(2)}\n{getDMMessageNumber(2)}")
-        await ctx.send(f"Message: {getDMMessageNumberVarName(1)}\n{getDMMessageNumber(1)}")
+        # Send the verification message in the verification channel
+        await verification_channel.send(message)
 
     @commands.command()
     @commands.has_permissions(kick_members=True)  # Requires kick permissions
@@ -247,6 +256,11 @@ class PMPAdmin(commands.Cog):
             await ctx.send("✅ No unverified members to kick!")
             return
 
+        console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
+        if not console_channel:
+            await ctx.send("⚠️ Error: Could not find the console channel.")
+            return
+        
         now = discord.utils.utcnow()
         kicked_members = []
 
@@ -257,13 +271,13 @@ class PMPAdmin(commands.Cog):
                     # await member.kick(reason=f"Unverified for more than {days_in_server} days")
                     kicked_members.append(f"{member.display_name} ({days_in_server} days)")
                 except discord.Forbidden:
-                    await ctx.send(f"⚠️ Could not kick {member.display_name} (missing permissions).")
+                    await console_channel.send(f"⚠️ Could not kick {member.display_name} (missing permissions).")
                 except discord.HTTPException:
-                    await ctx.send(f"⚠️ Failed to kick {member.display_name} due to a Discord error.")
+                    await console_channel.send(f"⚠️ Failed to kick {member.display_name} due to a Discord error.")
 
         # Send a summary of kicked members
         if kicked_members:
             kicked_list = "\n".join(kicked_members)
-            await ctx.send(f"🔨 **Simulation Would have Kicked Unverified Members:**\n```\n{kicked_list}```")
+            await console_channel.send(f"🔨 **Bot would have kicked the following Unverified Members:**\n```\n{kicked_list}```")
         else:
-            await ctx.send("✅ No members were kicked.")
+            await console_channel.send("✅ No members to kick today.")
