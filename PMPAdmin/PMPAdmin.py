@@ -164,7 +164,7 @@ class PMPAdmin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.copmmand():
+    @commands.command()
     async def simulateMessages(self, ctx):
         """Prints all of the messages we have to check for formatting"""
         await ctx.send(UNVERIFIED_HEADER)
