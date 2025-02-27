@@ -2,7 +2,7 @@
 import discord
 from redbot.core import commands
 from discord.ext import tasks
-from datetime import datetime, timezone
+from datetime import datetime, timezone, time
 from zoneinfo import ZoneInfo 
 from collections import defaultdict
 
@@ -10,7 +10,7 @@ from collections import defaultdict
 DDAY_DATE = datetime(2025, 2, 24, 0, 0, 0, tzinfo=timezone.utc)
 
 LA_TZ = ZoneInfo("America/Los_Angeles")
-DATE_DAILY_SCHEDULE = datetime.time(hour=9, minute=0, tzinfo=LA_TZ)
+DATE_DAILY_SCHEDULE = time(hour=9, minute=0, tzinfo=LA_TZ)
 
 #
 # ROLE IDs
