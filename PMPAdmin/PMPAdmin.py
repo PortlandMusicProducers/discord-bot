@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 import discord
 from redbot.core import commands
+from discord.ext import tasks
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo 
 from collections import defaultdict
 
 # Define DDAY as Midnight on Feb 24 UTC
 DDAY_DATE = datetime(2025, 2, 24, 0, 0, 0, tzinfo=timezone.utc)
+
+LA_TZ = ZoneInfo("America/Los_Angeles")
+DATE_DAILY_SCHEDULE = datetime.time(hour=9, minute=0, tzinfo=LA_TZ)
+
 #
 # ROLE IDs
 #
@@ -17,6 +22,7 @@ ROLE_ID_UNVERIFIED = 1335740367026262128
 #
 CHANNEL_ID_INTRO = 1173461536031907962
 CHANNEL_ID_CONSOLE = 1340411672170336398
+CHANNEL_ID_MODS = 1172413634278854676
 CHANNEL_ID_REMINDER = 1343433464116150373
 CHANNEL_ID_CHALLENGES = 1270947940843651150
 CHANNEL_ID_PRODUCTION_FEEDBACK = 1173461620823961650
@@ -163,6 +169,21 @@ def getDaysInServerWithDDAY(now, join_date):
 class PMPAdmin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.dailyCheck.start()
+    
+    def cog_unload(self):
+        self.dailyCheck.cancel()
+
+    @tasks.loop(time=DATE_DAILY_SCHEDULE)
+    async def dailyCheck(self):
+        self.alertUnverified()
+        self.kickUnverified()
+    
+    @dailyCheck.before_loop
+    async def before_dailyCheck(self):
+        console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
+        if console_channel:
+            await console_channel.send("🤖 Registered daily verification check at 9am")
 
     @commands.command()
     async def simulateMessages(self, ctx):
@@ -209,7 +230,7 @@ class PMPAdmin(commands.Cog):
     async def alertUnverified(self, ctx):
         """Posts a reminder for all unverified members inside of the reminder channel."""
         verification_channel = self.bot.get_channel(CHANNEL_ID_REMINDER)
-        console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
+        console_channel = self.bot.get_channel(CHANNEL_ID_MODS)
 
         if not verification_channel:
             await ctx.send("⚠️ Error: Could not find the verification channel.")
@@ -228,6 +249,8 @@ class PMPAdmin(commands.Cog):
         now = discord.utils.utcnow()
         message = UNVERIFIED_HEADER + "\n"
         simulated_dms = ""
+        success = 0
+        failed = 0
 
         for member, join_date in unverified_members:
             days_in_server = getDaysInServerWithDDAY(now, join_date)
@@ -239,12 +262,17 @@ class PMPAdmin(commands.Cog):
             #DM Each member with a reminder
             try:
                 await member.send(getDMMessageNumber(days_remaining))
+                success += 1
             except discord.Forbidden:
                 # Let mods know we couldn't DM someone
                 await console_channel.send(f"⚠️ Could not DM {member.display_name} (DMs closed).")
+                failed += 1
 
         # Send the verification message in the verification channel
         await verification_channel.send(message)
+
+        # Send a summary to the mods
+        await console_channel.send(f"Sent verification DMs. Success: {success} Failed: {failed}")
 
     @commands.command()
     @commands.has_permissions(kick_members=True)  # Requires kick permissions
@@ -256,7 +284,7 @@ class PMPAdmin(commands.Cog):
             await ctx.send("✅ No unverified members to kick!")
             return
 
-        console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
+        console_channel = self.bot.get_channel(CHANNEL_ID_MODS)
         if not console_channel:
             await ctx.send("⚠️ Error: Could not find the console channel.")
             return
