@@ -169,6 +169,7 @@ def getDaysInServerWithDDAY(now, join_date):
 class PMPAdmin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.PMP = self.bot.get_guild(1172411527870034000) #Store our guild
         self.dailyCheck.start()
     
     def cog_unload(self):
@@ -184,8 +185,12 @@ class PMPAdmin(commands.Cog):
     @dailyCheck.before_loop
     async def before_dailyCheck(self):
         console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
-        if console_channel:
-            await console_channel.send("🤖 Registered daily verification check at 9am")
+        #if console_channel:
+        #    await console_channel.send("🤖 Registered daily verification check at 9am")
+
+    @commands.command()
+    async def test(self, ctx):
+        await ctx.send(f"Guild name: {self.PMP.name}, Count: {self.PMP.member_count}")
 
     @commands.command()
     async def simulateMessages(self, ctx):
