@@ -177,16 +177,14 @@ class PMPAdmin(commands.Cog):
 
     @tasks.loop(time=DATE_DAILY_SCHEDULE)
     async def dailyCheck(self):
-        #TODO FIX ME, need to pass a context into these
-        #await self.alertUnverified()
-        #await self.kickUnverified()
-        test = 1
+        await self.alertUnverified()
+        await self.kickUnverified(5)
     
     @dailyCheck.before_loop
     async def before_dailyCheck(self):
         console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
-        #if console_channel:
-        #    await console_channel.send("🤖 Registered daily verification check at 9am")
+        if console_channel:
+            await console_channel.send("🤖 Registered daily verification check at 9am")
 
     @commands.command()
     async def test(self, ctx):
@@ -233,21 +231,12 @@ class PMPAdmin(commands.Cog):
 
         await ctx.send(message)
 
-    @commands.command()
-    async def alertUnverified(self, ctx):
+    async def alertUnverified(self):
         """Posts a reminder for all unverified members inside of the reminder channel."""
         verification_channel = self.bot.get_channel(CHANNEL_ID_REMINDER)
         console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
 
-        if not verification_channel:
-            await ctx.send("⚠️ Error: Could not find the verification channel.")
-            return
-    
-        if not console_channel:
-            await ctx.send("⚠️ Error: Could not find the console channel.")
-            return
-
-        unverified_members = getUnverifiedMembers(ctx.guild)
+        unverified_members = getUnverifiedMembers(self.PMP)
 
         if not unverified_members:
             await console_channel.send("✅ No unverified members to remind!")
@@ -281,21 +270,15 @@ class PMPAdmin(commands.Cog):
         # Send a summary to the mods
         await console_channel.send(f"Sent verification DMs. Success: {success} Failed: {failed}")
 
-    @commands.command()
-    @commands.has_permissions(kick_members=True)  # Requires kick permissions
-    async def kickUnverified(self, ctx, days_max_before_kick: int = 5):
+    # This used to be a command, but at the end of the day, admins don't need to call it manually, so note the removal of the
+    # context parameter.
+    async def kickUnverified(self, days_max_before_kick: int = 5):
         """Kicks all Unverified users who have been in the server for more than the specified number of days (default: 5)."""
-        unverified_members = getUnverifiedMembers(ctx.guild)
+        unverified_members = getUnverifiedMembers(self.PMP)
 
-        if not unverified_members:
-            await ctx.send("✅ No unverified members to kick!")
-            return
-
+        # Assume the channel always exists
         console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
-        if not console_channel:
-            await ctx.send("⚠️ Error: Could not find the console channel.")
-            return
-        
+
         now = discord.utils.utcnow()
         kicked_members = []
 
@@ -313,6 +296,6 @@ class PMPAdmin(commands.Cog):
         # Send a summary of kicked members
         if kicked_members:
             kicked_list = "\n".join(kicked_members)
-            await console_channel.send(f"🔨 **Bot would have kicked the following Unverified Members:**\n```\n{kicked_list}```")
+            await console_channel.send(f"🦶 **Bot would have kicked the following Unverified Members:**\n```\n{kicked_list}```")
         else:
             await console_channel.send("✅ No members to kick today.")
