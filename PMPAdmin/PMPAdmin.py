@@ -176,8 +176,10 @@ class PMPAdmin(commands.Cog):
 
     @tasks.loop(time=DATE_DAILY_SCHEDULE)
     async def dailyCheck(self):
-        self.alertUnverified()
-        self.kickUnverified()
+        #TODO FIX ME, need to pass a context into these
+        #await self.alertUnverified()
+        #await self.kickUnverified()
+        test = 1
     
     @dailyCheck.before_loop
     async def before_dailyCheck(self):
@@ -230,7 +232,7 @@ class PMPAdmin(commands.Cog):
     async def alertUnverified(self, ctx):
         """Posts a reminder for all unverified members inside of the reminder channel."""
         verification_channel = self.bot.get_channel(CHANNEL_ID_REMINDER)
-        console_channel = self.bot.get_channel(CHANNEL_ID_MODS)
+        console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
 
         if not verification_channel:
             await ctx.send("⚠️ Error: Could not find the verification channel.")
@@ -284,7 +286,7 @@ class PMPAdmin(commands.Cog):
             await ctx.send("✅ No unverified members to kick!")
             return
 
-        console_channel = self.bot.get_channel(CHANNEL_ID_MODS)
+        console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
         if not console_channel:
             await ctx.send("⚠️ Error: Could not find the console channel.")
             return
