@@ -185,13 +185,14 @@ class PMPAdmin(commands.Cog):
     @dailyCheck.before_loop
     async def before_dailyCheck(self):
         console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
-        #if console_channel:
-        #    await console_channel.send("🤖 Registered daily verification check at 9am")
+        if console_channel:
+            await console_channel.send("🤖 Registered daily verification check at 9am")
 
     @commands.command()
     async def test(self, ctx):
-        await self.alertUnverified()
-        await self.kickUnverified(5)
+        #await self.alertUnverified()
+        #await self.kickUnverified(5)
+        print ("Test")
 
     @commands.command()
     async def simulateMessages(self, ctx):
