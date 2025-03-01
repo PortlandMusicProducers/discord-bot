@@ -169,8 +169,10 @@ def getDaysInServerWithDDAY(now, join_date):
 class PMPAdmin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.PMP = self.bot.get_guild(1172411527870034000) #Store our guild
         self.dailyCheck.start()
+    
+    def get_guild(self):
+        return self.bot.get_guild(1172411527870034000)
     
     def cog_unload(self):
         self.dailyCheck.cancel()
@@ -183,12 +185,13 @@ class PMPAdmin(commands.Cog):
     @dailyCheck.before_loop
     async def before_dailyCheck(self):
         console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
-        if console_channel:
-            await console_channel.send("🤖 Registered daily verification check at 9am")
+        #if console_channel:
+        #    await console_channel.send("🤖 Registered daily verification check at 9am")
 
     @commands.command()
     async def test(self, ctx):
-        await ctx.send(f"Guild name: {self.PMP.name}, Count: {self.PMP.member_count}")
+        await self.alertUnverified()
+        await self.kickUnverified(5)
 
     @commands.command()
     async def simulateMessages(self, ctx):
@@ -236,7 +239,11 @@ class PMPAdmin(commands.Cog):
         verification_channel = self.bot.get_channel(CHANNEL_ID_REMINDER)
         console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
 
-        unverified_members = getUnverifiedMembers(self.PMP)
+        PMP = self.get_guild()
+        if PMP is None:
+            print("Could not find guild")
+            return
+        unverified_members = getUnverifiedMembers(PMP)
 
         if not unverified_members:
             await console_channel.send("✅ No unverified members to remind!")
@@ -274,7 +281,12 @@ class PMPAdmin(commands.Cog):
     # context parameter.
     async def kickUnverified(self, days_max_before_kick: int = 5):
         """Kicks all Unverified users who have been in the server for more than the specified number of days (default: 5)."""
-        unverified_members = getUnverifiedMembers(self.PMP)
+        PMP = self.get_guild()
+        if PMP is None:
+            print("Could not find guild")
+            return
+        
+        unverified_members = getUnverifiedMembers(PMP)
 
         # Assume the channel always exists
         console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
