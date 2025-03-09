@@ -58,12 +58,12 @@ To become a verified member, please:
 If these steps aren't completed, we'll need to remove you from the server to keep things running smoothly. We hope you'll stick around!"""
 
 DM_MESSAGE_5 = f"""**Hey there—welcome to Portland Music Producers!**
-This Discord server is the online platform for our community. It is a place to share and grow as producers – together. We're so glad you found us!
+This Discord server is the online platform for our community. It is a place to share and grow as producers - together. We're so glad you found us!
 
 Here's a glimpse of what we've got going on:
-* **Weekly Calls** – Every Wednesday at 7p we chat production tips, struggles, and what we're working on.
-* **In-Person Meetups** – Every month, at local recording studios.
-* **Collaborations & Challenges** – Join weekly creative <#{CHANNEL_ID_CHALLENGES}>, share song ideas, or remix a fellow member's track!
+* **Weekly Calls** - Every Wednesday at 7p we chat production tips, struggles, and what we're working on.
+* **In-Person Meetups** - Every month, at local recording studios.
+* **Collaborations & Challenges** - Join weekly creative <#{CHANNEL_ID_CHALLENGES}>, share song ideas, or remix a fellow member's track!
 
 **Two Steps to Join the Fun** (Complete within 5 days):
 1. Fill out our welcome form ({URL_ONBOARDING}).
@@ -150,7 +150,7 @@ DM_MESSAGE_1_V = f"""There's a lot of value to uncover here if you know where to
 * DAW-specific channels (#📎ableton, #🍏logic, #🎛pro-tools, etc.). Pro tips to enhance your productions and improve your workflow.
 * <#{CHANNEL_ID_BUY_SELL_TRADE}>: Sell or swap gear with fellow producers.
 
-This onboarding messaging is now complete. If you have any questions, holler at a mod, either with a direct message or the @Mod tag – we're here to help.
+This onboarding messaging is now complete. If you have any questions, holler at a mod, either with a direct message or the @Mod tag - we're here to help.
 
 This community is owned by no one, it is of and for the people. If you have any ideas pop them into <#{CHANNEL_ID_SUGGESTIONS}>. And for anything more substantial or if you want to get involved, holler!
 You have found your tribe 🤘.
@@ -236,6 +236,7 @@ class PMPAdmin(commands.Cog):
     async def dailyCheck(self):
         await self.alertUnverified()
         await self.kickUnverified(5)
+        await self.sendOnboardingDMs()
     
     @dailyCheck.before_loop
     async def before_dailyCheck(self):
@@ -245,22 +246,11 @@ class PMPAdmin(commands.Cog):
 
     @commands.command()
     async def testMessaging(self, ctx):
-        #await self.alertUnverified()
-        #await self.kickUnverified(5)
         await self.simulateMessages(ctx, False)
 
     @commands.command()
     async def testMessaging2(self, ctx):
-        #await self.alertUnverified()
-        #await self.kickUnverified(5)
-        await self.simulateMessages(ctx, True)
-
-    @commands.command()
-    async def testOnboarding(self, ctx):
-        #await self.alertUnverified()
-        #await self.kickUnverified(5)
-        await self.sendOnboardingDMs(ctx)
-        
+        await self.simulateMessages(ctx, True)        
 
     @commands.command()
     async def simulateMessages(self, ctx, verified=False):
@@ -303,7 +293,7 @@ class PMPAdmin(commands.Cog):
 
         await ctx.send(message)
 
-    async def sendOnboardingDMs(self, ctx):
+    async def sendOnboardingDMs(self):
         """Sends a DM onboarding message to verified members during the 5 day intro period"""
         console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
 
@@ -324,16 +314,17 @@ class PMPAdmin(commands.Cog):
             if days_in_server <= 5:
                 #DM Each member with a reminder
                 try:
-                    #await member.send(getDMMessageNumber(days_remaining, True))
-                    await ctx.send(f"Would have sent DM {getDMMessageNumber(days_remaining, True)} to user {member.display_name}")
+                    await member.send(getDMMessageNumber(days_remaining, True))
+                    #await ctx.send(f"Would have sent DM {getDMMessageNumber(days_remaining, True)} to user {member.display_name}")
                     success += 1
                 except discord.Forbidden:
                     # Let mods know we couldn't DM someone
-                    #await console_channel.send(f"⚠️ Could not DM {member.display_name} (DMs closed).")
+                    await console_channel.send(f"⚠️ Could not send onboarding DM to {member.display_name} (DMs closed).")
                     failed += 1
 
         # Send a summary to the mods
-        #await console_channel.send(f"Sent onboarding DMs. Success: {success} Failed: {failed}")
+        if success or failed:
+            await console_channel.send(f"Sent onboarding DMs. Success: {success} Failed: {failed}")
 
     async def alertUnverified(self):
         """Posts a reminder for all unverified members inside of the reminder channel."""
