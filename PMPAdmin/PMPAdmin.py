@@ -232,6 +232,18 @@ class PMPAdmin(commands.Cog):
     def cog_unload(self):
         self.dailyCheck.cancel()
 
+    @commands.Cog.listener()
+    async def on_member_update(self, before: discord.Member, after: discord.Member):
+        if before.roles != after.roles:
+            added_roles = [role for role in after.roles if role not in before.roles]
+            removed_roles = [role for role in before.roles if role not in after.roles]
+
+            verification_channel = self.bot.get_channel(CHANNEL_ID_REMINDER)
+
+            if verification_channel:
+                if any(role.id == ROLE_ID_MEMBER for role in added_roles):
+                    await verification_channel.send(f"Welcome **{after.display_name}**, now a full member of the community!🎉")
+
     @tasks.loop(time=DATE_DAILY_SCHEDULE)
     async def dailyCheck(self):
         await self.alertUnverified()
