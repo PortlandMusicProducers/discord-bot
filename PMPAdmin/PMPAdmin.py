@@ -15,30 +15,32 @@ DATE_DAILY_SCHEDULE = time(hour=9, minute=0, tzinfo=LA_TZ)
 #
 # ROLE IDs
 #
+ROLE_ID_MEMBER = 1330786935542775808
 ROLE_ID_UNVERIFIED = 1335740367026262128
 
 #
 # Channel IDs
 #
-CHANNEL_ID_INTRO = 1173461536031907962
-CHANNEL_ID_CONSOLE = 1340411672170336398
-CHANNEL_ID_MODS = 1172413634278854676
-CHANNEL_ID_REMINDER = 1343433464116150373
-CHANNEL_ID_CHALLENGES = 1270947940843651150
-CHANNEL_ID_PRODUCTION_FEEDBACK = 1173461620823961650
-CHANNEL_ID_JOURNAL = 1264661701446598658
-CHANNEL_ID_BREAKDOWNS = 1334735726360924202
-CHANNEL_ID_RULES = 1172411528352387082
-CHANNEL_ID_BUILD_A_BEAT = 1271265578556063817
-CHANNEL_ID_QOTD = 1319161247576363048
-CHANNEL_ID_BOOK_CLUB = 1319161813849342012
-CHANNEL_ID_BUY_SELL_TRADE = 1319080558927679600
-CHANNEL_ID_TECH_TALK = 1319435010578845716
-CHANNEL_ID_GEAR_PLUGINS_DEALS = 1319162149251059754
 CHANNEL_ID_ABLETON = 1325594311215153234
+CHANNEL_ID_BOOK_CLUB = 1319161813849342012
+CHANNEL_ID_BREAKDOWNS = 1334735726360924202
+CHANNEL_ID_BUILD_A_BEAT = 1271265578556063817
+CHANNEL_ID_BUY_SELL_TRADE = 1319080558927679600
+CHANNEL_ID_CHALLENGES = 1270947940843651150
+CHANNEL_ID_CONSOLE = 1340411672170336398
+CHANNEL_ID_GEAR_PLUGINS_DEALS = 1319162149251059754
+CHANNEL_ID_INTRO = 1173461536031907962
+CHANNEL_ID_JOURNAL = 1264661701446598658
+CHANNEL_ID_MODS = 1172413634278854676
+CHANNEL_ID_PRODUCTION_FEEDBACK = 1173461620823961650
+CHANNEL_ID_QOTD = 1319161247576363048
 CHANNEL_ID_REASON = 1330293070176059392
+CHANNEL_ID_REMINDER = 1343433464116150373
+CHANNEL_ID_RULES = 1172411528352387082
+CHANNEL_ID_SUGGESTIONS = 1260465592067162194
+CHANNEL_ID_TECH_TALK = 1319435010578845716
 CHANNEL_ID_WELCOME = 1334290418589761629
-
+CHANNEL_ID_WHAT_YOU_LISTENING_TO = 1224547549831106650
 #
 # Links
 #
@@ -83,6 +85,15 @@ Once you're a verified member the locked collaboration & feedback channels will 
 If you have any questions or need help, just let us know. We're excited to have you on board!
 ♥ Portland Music Producers ♥"""
 
+DM_MESSAGE_4_V = f"""**Hey again!**
+We hope you're settling in. Now that you're a verified member, the Collaboration & Feedback channels are accessible to you:
+* Make your own <#{CHANNEL_ID_JOURNAL}>! These are personal threads where you can be a documentarian of your own work and catalog thoughts, materials, audio snippets, etc., in a semi-public space. They're a great window into the processes of your peers.
+* Solicit ideas in <#{CHANNEL_ID_PRODUCTION_FEEDBACK}>, a safe space to share work-in-progress and get constructive critiques that can level up your productions.
+* Got a fun project you can share, or technique you can teach?  Want to learn how to livestream? Make some noise in <#{CHANNEL_ID_BREAKDOWNS}>
+
+If you have any questions or need help, just let us know. We're excited to have you on board!
+♥ Portland Music Producers ♥"""
+
 DM_MESSAGE_3 = f"""**Hey again!**
 It takes vulnerability and trust to share your art. That's why in Portland Music Producers we care deeply about nurturing a real sense of community.
 
@@ -95,6 +106,13 @@ Visit <#{CHANNEL_ID_WELCOME}> to see what activities we recommend you start with
 This is your home now too, so explore, make some noise and have fun!
 ♥ Portland Music Producers ♥"""
 
+DM_MESSAGE_3_V = f"""**Hey again!**
+It takes vulnerability and trust to share your art. That's why in Portland Music Producers we care deeply about nurturing a real sense of community. We believe in an open, safe space where everyone feels welcome to share and grow.
+
+Our goal is that everyone can be a participant. Visit <#{CHANNEL_ID_WELCOME}> to see what activities we recommend you start with.
+
+This is your home now too, so please explore, make some noise and have fun!
+♥ Portland Music Producers ♥"""
 
 DM_MESSAGE_2 = f"""**Hey there,**
 Time's nearly up. If you haven't introduced yourself and filled the form, you'll be removed after tomorrow. We'd hate to see you miss out on:
@@ -102,13 +120,21 @@ Time's nearly up. If you haven't introduced yourself and filled the form, you'll
 * <#{CHANNEL_ID_QOTD}> (Question of the Day): Thought-provoking daily questions help you get to know yourself and each other.
 * <#{CHANNEL_ID_BOOK_CLUB}>: Read and discuss a book that inspires better production and artistry.
 * <#{CHANNEL_ID_BUY_SELL_TRADE}>, <#{CHANNEL_ID_TECH_TALK}>, <#{CHANNEL_ID_GEAR_PLUGINS_DEALS}>: Chat about gear and swap items with fellow producers.
-* DAW-specific Channels (Ableton, Logic, etc.): Get and give tips tailored to your setup.
+* DAW-specific Channels (#📎ableton, #🍏logic, #🎛pro-tools, etc.): Get and give tips tailored to your setup.
 
 **Verification Steps:**
 1. ({URL_ONBOARDING}).
 2. <#{CHANNEL_ID_INTRO}>.
 
 We truly hope you'll stick around—there's so much waiting for you in our community!"""
+
+DM_MESSAGE_2_V = f"""**Hey there,**
+We hope you've had a chance to poke around the server. Our goal is to be an open, creative, and encouraging space. It can be so incredibly energizing to be surrounded by supportive people who are into the same stuff you are.
+
+Fun ways to mingle?
+* Make a move in <#{CHANNEL_ID_BUILD_A_BEAT}>, our weekly collaborative project where each person can add one layer. It's a great way to practice collaborating with others and stimulate the producer-mind, “what is this song calling for?”.
+* Answer the <#{CHANNEL_ID_QOTD}>. These thought-provoking daily questions help you get to know yourself and each other.
+* Participate in <#{CHANNEL_ID_CHALLENGES}>. These periodic prompts are a fun way to breed creativity, and think outside of the box. Like every other activity everyone is encouraged to participate regardless of experience level."""
 
 DM_MESSAGE_1 = f"""**Hey there,**
 You will be kicked from the server if you don't complete the 2 verification items (intro + form) today. This is an effort to maintain a space that is engaged, safe, and focused on growth.
@@ -117,9 +143,31 @@ Thanks for understanding, and we hope you'll stick around!
 
 If you feel you have completed the requirements and should be verified, just holler at an @admin and let us know!
 
-If you are reading this message and have already been kicked out of the server, know you can always join again: {URL_DISCORD_JOIN}.
-"""
+If you are reading this message and have already been kicked out of the server, know you can always join again: {URL_DISCORD_JOIN}."""
 
+DM_MESSAGE_1_V = f"""There's a lot of value to uncover here if you know where to look! Here are some last suggestions:
+* <#{CHANNEL_ID_WHAT_YOU_LISTENING_TO}>: Take a break from the algorithms and discover music recommended by real life humans.
+* DAW-specific channels (#📎ableton, #🍏logic, #🎛pro-tools, etc.). Pro tips to enhance your productions and improve your workflow.
+* <#{CHANNEL_ID_BUY_SELL_TRADE}>: Sell or swap gear with fellow producers.
+
+This onboarding messaging is now complete. If you have any questions, holler at a mod, either with a direct message or the @Mod tag – we're here to help.
+
+This community is owned by no one, it is of and for the people. If you have any ideas pop them into <#{CHANNEL_ID_SUGGESTIONS}>. And for anything more substantial or if you want to get involved, holler!
+You have found your tribe 🤘.
+<3 Portland Music Producers"""
+
+def getVerifiedMembers(guild):
+    """Returns a list of verified members and the number of days they've been in the server."""
+    now = discord.utils.utcnow()
+    verified_members = []
+
+    for member in guild.members:
+        if any(role.id == ROLE_ID_MEMBER for role in member.roles):
+            join_date = member.joined_at
+            verified_members.append((member, join_date))
+
+    # Sort by days in server (newest first)
+    return sorted(verified_members, key=lambda x: x[1], reverse=False)
 
 def getUnverifiedMembers(guild):
     """Returns a list of unverified members and the number of days they've been in the server."""
@@ -134,29 +182,36 @@ def getUnverifiedMembers(guild):
     # Sort by days in server (oldest first)
     return sorted(unverified_members, key=lambda x: x[1], reverse=True)
 
-def getDMMessageNumberVarName(days_remaining):
+def getDMMessageNumberVarName(days_remaining, verified=False):
+    message = ""
     if days_remaining >= 5:
+        # day 5 has the same messaging for both verified/non-verified
         return "DM_MESSAGE_5"
     elif days_remaining == 4:
-        return "DM_MESSAGE_4"
+        message = "DM_MESSAGE_4"
     elif days_remaining == 3:
-        return "DM_MESSAGE_3"
+        message = "DM_MESSAGE_3"
     elif days_remaining == 2:
-        return "DM_MESSAGE_2"
+        message = "DM_MESSAGE_2"
     elif days_remaining <= 1:
-        return "DM_MESSAGE_1"
+        message = "DM_MESSAGE_1"
     
-def getDMMessageNumber(days_remaining):
+    if verified:
+        message += "_V"
+
+    return message
+    
+def getDMMessageNumber(days_remaining, verified=False):
     if days_remaining >= 5:
         return DM_MESSAGE_5
     elif days_remaining == 4:
-        return DM_MESSAGE_4
+        return DM_MESSAGE_4_V if verified else DM_MESSAGE_4
     elif days_remaining == 3:
-        return DM_MESSAGE_3
+        return DM_MESSAGE_3_V if verified else DM_MESSAGE_3
     elif days_remaining == 2:
-        return DM_MESSAGE_2
+        return DM_MESSAGE_2_V if verified else DM_MESSAGE_2
     elif days_remaining <= 1:
-        return DM_MESSAGE_1
+        return DM_MESSAGE_1_V if verified else DM_MESSAGE_1
 
 def getDaysInServerWithDDAY(now, join_date):
     days_in_server = 0
@@ -189,20 +244,33 @@ class PMPAdmin(commands.Cog):
             await console_channel.send("🤖 Registered daily verification check at 9am")
 
     @commands.command()
-    async def test(self, ctx):
+    async def testMessaging(self, ctx):
         #await self.alertUnverified()
         #await self.kickUnverified(5)
-        print ("Test")
+        await self.simulateMessages(ctx, False)
 
     @commands.command()
-    async def simulateMessages(self, ctx):
+    async def testMessaging2(self, ctx):
+        #await self.alertUnverified()
+        #await self.kickUnverified(5)
+        await self.simulateMessages(ctx, True)
+
+    @commands.command()
+    async def testOnboarding(self, ctx):
+        #await self.alertUnverified()
+        #await self.kickUnverified(5)
+        await self.sendOnboardingDMs(ctx)
+        
+
+    @commands.command()
+    async def simulateMessages(self, ctx, verified=False):
         """Prints all of the messages we have to check for formatting"""
         await ctx.send(UNVERIFIED_HEADER)
-        await ctx.send(f"Message: {getDMMessageNumberVarName(5)}\n{getDMMessageNumber(5)}")
-        await ctx.send(f"Message: {getDMMessageNumberVarName(4)}\n{getDMMessageNumber(4)}")
-        await ctx.send(f"Message: {getDMMessageNumberVarName(3)}\n{getDMMessageNumber(3)}")
-        await ctx.send(f"Message: {getDMMessageNumberVarName(2)}\n{getDMMessageNumber(2)}")
-        await ctx.send(f"Message: {getDMMessageNumberVarName(1)}\n{getDMMessageNumber(1)}")
+        await ctx.send(f"Message: {getDMMessageNumberVarName(5, verified)}\n{getDMMessageNumber(5, verified)}")
+        await ctx.send(f"Message: {getDMMessageNumberVarName(4, verified)}\n{getDMMessageNumber(4, verified)}")
+        await ctx.send(f"Message: {getDMMessageNumberVarName(3, verified)}\n{getDMMessageNumber(3, verified)}")
+        await ctx.send(f"Message: {getDMMessageNumberVarName(2, verified)}\n{getDMMessageNumber(2, verified)}")
+        await ctx.send(f"Message: {getDMMessageNumberVarName(1, verified)}\n{getDMMessageNumber(1, verified)}")
 
     @commands.command()
     async def reportUnverified(self, ctx):
@@ -234,6 +302,38 @@ class PMPAdmin(commands.Cog):
             message += f"📌 {member.name} - **{(now - join_date).days}** days in server | **{days_remaining}** days remaining | Intro: {intro_status}\n"
 
         await ctx.send(message)
+
+    async def sendOnboardingDMs(self, ctx):
+        """Sends a DM onboarding message to verified members during the 5 day intro period"""
+        console_channel = self.bot.get_channel(CHANNEL_ID_CONSOLE)
+
+        PMP = self.get_guild()
+        if PMP is None:
+            print("Could not find guild")
+            return
+        verified_members = getVerifiedMembers(PMP)
+
+        now = discord.utils.utcnow()
+        message = UNVERIFIED_HEADER + "\n"
+        success = 0
+        failed = 0
+
+        for member, join_date in verified_members:
+            days_in_server = getDaysInServerWithDDAY(now, join_date)
+            days_remaining = max(0, 5 - days_in_server)
+            if days_in_server <= 5:
+                #DM Each member with a reminder
+                try:
+                    #await member.send(getDMMessageNumber(days_remaining, True))
+                    await ctx.send("Would have sent DM {days_remaining} to user {member.display_name}")
+                    success += 1
+                except discord.Forbidden:
+                    # Let mods know we couldn't DM someone
+                    #await console_channel.send(f"⚠️ Could not DM {member.display_name} (DMs closed).")
+                    failed += 1
+
+        # Send a summary to the mods
+        #await console_channel.send(f"Sent onboarding DMs. Success: {success} Failed: {failed}")
 
     async def alertUnverified(self):
         """Posts a reminder for all unverified members inside of the reminder channel."""
@@ -297,7 +397,7 @@ class PMPAdmin(commands.Cog):
 
         for member, join_date in unverified_members:
             days_in_server = getDaysInServerWithDDAY(now, join_date)
-            if days_in_server > days_max_before_kick:
+            if days_in_server >= days_max_before_kick:
                 try:
                     # await member.kick(reason=f"Unverified for more than {days_in_server} days")
                     kicked_members.append(f"{member.display_name} ({days_in_server} days)")
