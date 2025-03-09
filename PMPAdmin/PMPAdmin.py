@@ -325,7 +325,7 @@ class PMPAdmin(commands.Cog):
                 #DM Each member with a reminder
                 try:
                     #await member.send(getDMMessageNumber(days_remaining, True))
-                    await ctx.send("Would have sent DM {days_remaining} to user {member.display_name}")
+                    await ctx.send(f"Would have sent DM {days_remaining} to user {member.display_name}")
                     success += 1
                 except discord.Forbidden:
                     # Let mods know we couldn't DM someone
