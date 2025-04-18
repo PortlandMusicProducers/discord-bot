@@ -3,6 +3,7 @@ import discord
 import json
 import os
 import tempfile
+from typing import Union
 from redbot.core import commands
 
 class ExportMessages(commands.Cog):
@@ -13,7 +14,7 @@ class ExportMessages(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(administrator=True)
-    async def exportchannel(self, ctx, channel: discord.TextChannel, limit: int = 0):
+    async def exportchannel(self, ctx, channel: Union[discord.TextChannel, discord.Thread], limit: int = 0):
         """Exports the last `limit` messages from a channel to a JSON file. Use 0 for unlimited."""
         
         if limit == 0:
