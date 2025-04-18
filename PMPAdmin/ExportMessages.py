@@ -17,6 +17,19 @@ class ExportMessages(commands.Cog):
     async def exportchannel(self, ctx, channel: Union[discord.TextChannel, discord.Thread], limit: int = 0):
         """Exports the last `limit` messages from a channel to a JSON file. Use 0 for unlimited."""
         
+        # Resolve an integer based channel id to a thread or channel
+        if isinstance(channel, int):
+            # Try to fetch it as a thread first, then a channel
+            thread = ctx.guild.get_thread(channel)
+            if thread:
+                channel = thread
+            else:
+                channel = ctx.guild.get_channel(channel)
+
+        if channel is None:
+            await ctx.send("⚠️ Couldn't find the specified channel or thread.")
+            return
+        
         if limit == 0:
             limit = None
         
