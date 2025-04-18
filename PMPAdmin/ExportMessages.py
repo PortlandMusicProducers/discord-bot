@@ -34,7 +34,7 @@ class ExportMessages(commands.Cog):
             tmp_path = tmp.name
 
         # Send the file
-        await ctx.send("Here is the exported message file:", file=discord.File(filename))
+        await ctx.send("Here is the exported message file:", file=discord.File(tmp_path))
 
         # Clean up the file
         os.remove(tmp_path)
