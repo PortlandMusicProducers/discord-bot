@@ -1,4 +1,5 @@
 from .PMPAdmin import PMPAdmin
+from .ExportMessages import ExportMessages
 
 __red_end_user_data_statement__ = (
     "This cog adds admin functions for PMP"
@@ -6,3 +7,4 @@ __red_end_user_data_statement__ = (
 
 async def setup(bot):
     await bot.add_cog(PMPAdmin(bot))
+    await bot.add_cog(ExportMessages(bot))
