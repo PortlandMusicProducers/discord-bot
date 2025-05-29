@@ -402,7 +402,7 @@ class PMPAdmin(commands.Cog):
             days_in_server = getDaysInServerWithDDAY(now, join_date)
             if days_in_server >= days_max_before_kick:
                 try:
-                    # await member.kick(reason=f"Unverified for more than {days_in_server} days")
+                    await member.kick(reason=f"Unverified for more than {days_in_server} days")
                     kicked_members.append(f"{member.display_name} ({days_in_server} days)")
                 except discord.Forbidden:
                     await console_channel.send(f"⚠️ Could not kick {member.display_name} (missing permissions).")
@@ -412,6 +412,6 @@ class PMPAdmin(commands.Cog):
         # Send a summary of kicked members
         if kicked_members:
             kicked_list = "\n".join(kicked_members)
-            await console_channel.send(f"🦶 **Bot would have kicked the following Unverified Members:**\n```\n{kicked_list}```")
+            await console_channel.send(f"🦶 **Bot kicked the following Unverified Members:**\n```\n{kicked_list}```")
         else:
             await console_channel.send("✅ No members to kick today.")
