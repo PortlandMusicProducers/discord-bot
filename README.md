@@ -25,6 +25,7 @@ services:
 ```
 
 When you fire up the docker container, you'll need to complete the youtube api oauth workflow. Check `docker compose logs` for the URL. You can use this python 1-liner to execute the callback:
+
 ```python
 docker compose exec redbot /bin/bash -c '
   source /data/venv/bin/activate
@@ -43,3 +44,16 @@ PY
 After pushing to github, to update the bot from the console:
 !repo update
 !cog update
+
+# Youtube Playlist
+Delete the token.json and restart the bot. Follow the URL to authenticate the youtube API. When you get the callback api in the browser, pass it in to docker:
+  docker compose exec redbot /bin/bash -c '
+    source /data/venv/bin/activate
+    python - <<PY
+import urllib.request
+resp = urllib.request.urlopen(
+  "YOUR-URL-HERE"
+)
+print("HTTP callback response:", resp.read().decode(errors="ignore"))
+PY
+'

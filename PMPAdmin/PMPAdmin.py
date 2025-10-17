@@ -54,8 +54,10 @@ UNVERIFIED_HEADER = f"""**🔔Unverified Members Reminder:**
 To become a verified member, please:
 1. Fill out our Google Form ({URL_ONBOARDING}).
 2. Post an introduction in <#{CHANNEL_ID_INTRO}>.
+3. Wait patiently for a moderator to verify you, this is a manual process and can sometimes take a few days.
 
-If these steps aren't completed, we'll need to remove you from the server to keep things running smoothly. We hope you'll stick around!"""
+If these steps aren't completed, we'll need to remove you from the server to keep things running smoothly. We hope you'll stick around!
+"""
 
 DM_MESSAGE_5 = f"""**Hey there—welcome to Portland Music Producers!**
 This Discord server is the online platform for our community. It is a place to share and grow as producers - together. We're so glad you found us!
