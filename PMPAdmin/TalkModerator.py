@@ -2,8 +2,7 @@ import discord
 from redbot.core import commands, Config
 
 REMINDER_MESSAGE = (
-    "Hi {display_name}! Please only post audio file attachments in {channel_mention}. "
-    "Non-audio messages are removed to keep the channel focused - thanks for understanding!"
+    "🎶Bleep boop🎶 Hi {display_name}!  {channel_mention} only allows messages with audio files attached. Please read the channel topic for more details!"
 )
 
 
