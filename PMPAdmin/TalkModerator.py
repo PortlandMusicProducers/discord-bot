@@ -93,7 +93,7 @@ class TalkModerator(commands.Cog):
         )
 
         try:
-            reminder_msg = await message.channel.send(f"{message.author.mention} {reminder}")
+            reminder_msg = await message.channel.send(f"{reminder}")
             # Delete the reminder after 20 seconds
             await asyncio.sleep(20)
             await reminder_msg.delete()
