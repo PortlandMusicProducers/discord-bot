@@ -4,7 +4,7 @@ from redbot.core import commands, Config
 
 REMINDER_MESSAGE = (
     "🎶Bleep boop🎶 Hi {user_mention}!\n\n"
-    "{channel_mention} is designed for quick posting and listening — single audio files only (no message text).\n\n"
+    "Sketch Pad is designed for quick posting and listening — single audio files only (no message text).\n\n"
     "Want to add notes or get feedback? Post (or forward your sketch) to <#1264661701446598658> or <#1173461620823961650>.\n\n"
     "Please try again — we're excited to hear it!"
 )
@@ -105,7 +105,6 @@ class TalkModerator(commands.Cog):
 
         reminder = REMINDER_MESSAGE.format(
             user_mention=message.author.mention,
-            channel_mention=message.channel.mention,
         )
 
         try:
