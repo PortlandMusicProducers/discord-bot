@@ -74,13 +74,6 @@ class TalkModerator(commands.Cog):
         if channel_id is None or message.channel.id != channel_id:
             return False
 
-        # Allow moderators/admins to post without enforcement
-        try:
-            if message.author.guild_permissions.manage_messages:
-                return False
-        except Exception:
-            pass
-
         # Check if message has text content (stripped of whitespace)
         has_text = bool(message.content.strip())
 
