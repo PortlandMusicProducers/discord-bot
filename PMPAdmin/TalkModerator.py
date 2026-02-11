@@ -80,8 +80,20 @@ class TalkModerator(commands.Cog):
         # Check if message has stickers
         has_stickers = bool(message.stickers)
 
-        # If no text and no stickers, message is valid
-        if not has_text and not has_stickers:
+        # Check attachments: require exactly one audio file and no text/stickers
+        attachments = message.attachments
+
+        def _is_audio_attachment(att: discord.Attachment) -> bool:
+            name = getattr(att, "filename", "").lower()
+            content_type = (getattr(att, "content_type", None) or "").lower()
+            if any(name.endswith(ext) for ext in self.AUDIO_EXTS):
+                return True
+            if content_type.startswith("audio/"):
+                return True
+            return False
+
+        # Valid message: exactly one attachment, it's an audio file, and no text/stickers
+        if len(attachments) == 1 and not has_text and not has_stickers and _is_audio_attachment(attachments[0]):
             return False
 
         # Invalid message — delete and send channel reminder
