@@ -77,8 +77,11 @@ class TalkModerator(commands.Cog):
         # Check if message has text content (stripped of whitespace)
         has_text = bool(message.content.strip())
 
-        # If no text, message is valid
-        if not has_text:
+        # Check if message has stickers
+        has_stickers = bool(message.stickers)
+
+        # If no text and no stickers, message is valid
+        if not has_text and not has_stickers:
             return False
 
         # Invalid message — delete and send channel reminder
