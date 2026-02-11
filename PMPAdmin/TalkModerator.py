@@ -3,8 +3,8 @@ import discord
 from redbot.core import commands, Config
 
 REMINDER_MESSAGE = (
-    "🎶Bleep boop🎶 Hi {display_name}! {channel_mention} is designed for quick posting and listening — single audio files only (no message text). "
-    "Want to add notes or get feedback? Post (or forward your sketch) to <#1264661701446598658> or <#1173461620823961650>."
+    "🎶Bleep boop🎶 Hi {user_mention}! {channel_mention} is designed for quick posting and listening — single audio files only (no message text). "
+    "Want to add notes or get feedback? Post (or forward your sketch) to <#1264661701446598658> or <#1173461620823961650>. "
     "Please try again — we're excited to hear it!"
 )
 
@@ -88,7 +88,7 @@ class TalkModerator(commands.Cog):
             pass
 
         reminder = REMINDER_MESSAGE.format(
-            display_name=message.author.display_name,
+            user_mention=message.author.mention,
             channel_mention=message.channel.mention,
         )
 
