@@ -1,10 +1,12 @@
+import asyncio
 import discord
 from redbot.core import commands, Config
 
 REMINDER_MESSAGE = (
-    "🎶Bleep boop🎶 Hi {display_name}!  {channel_mention} only allows messages with audio files attached. Please read the channel topic for more details!"
+    "🎶Bleep boop🎶 Hi {display_name}! {channel_mention} is designed for quick posting and listening — single audio files only (no message text). "
+    "Want to add notes or get feedback? Post (or forward your sketch) to <#1264661701446598658> or <#1173461620823961650>."
+    "Please try again — we're excited to hear it!"
 )
-
 
 class TalkModerator(commands.Cog):
     """Enforce audio-only posts in a configured channel using Red's Config.
@@ -56,37 +58,37 @@ class TalkModerator(commands.Cog):
         else:
             await ctx.send("No channel configured.")
 
-    @commands.Cog.listener()
-    async def on_message(self, message: discord.Message):
+    async def _enforce_audio_only(self, message: discord.Message) -> bool:
+        """
+        Check if message violates audio-only rule and enforce if needed.
+        Returns True if enforcement action was taken, False otherwise.
+        """
         # Ignore bots and DMs
         if message.author.bot or isinstance(message.channel, discord.DMChannel):
-            return
+            return False
 
         if not message.guild:
-            return
+            return False
 
         channel_id = await self.config.guild(message.guild).channel_id()
         if channel_id is None or message.channel.id != channel_id:
-            return
+            return False
 
-        # Check attachments for audio files
-        has_audio = False
-        for a in message.attachments:
-            # Prefer content_type if present
-            ctype = getattr(a, "content_type", None)
-            if ctype and ctype.startswith("audio"):
-                has_audio = True
-                break
-            # Fallback to filename extension
-            fname = (getattr(a, "filename", "") or "").lower()
-            if any(fname.endswith(ext) for ext in self.AUDIO_EXTS):
-                has_audio = True
-                break
+        # Allow moderators/admins to post without enforcement
+        try:
+            if message.author.guild_permissions.manage_messages:
+                return False
+        except Exception:
+            pass
 
-        if has_audio:
-            return
+        # Check if message has text content (stripped of whitespace)
+        has_text = bool(message.content.strip())
 
-        # Not an audio attachment — delete and send friendly reminder
+        # If no text, message is valid
+        if not has_text:
+            return False
+
+        # Invalid message — delete and send channel reminder
         try:
             await message.delete()
         except Exception:
@@ -98,6 +100,19 @@ class TalkModerator(commands.Cog):
         )
 
         try:
-            await message.author.send(reminder)
-        except discord.Forbidden:
+            reminder_msg = await message.channel.send(f"{message.author.mention} {reminder}")
+            # Delete the reminder after 20 seconds
+            await asyncio.sleep(20)
+            await reminder_msg.delete()
+        except Exception:
             pass
+
+        return True
+
+    @commands.Cog.listener()
+    async def on_message(self, message: discord.Message):
+        await self._enforce_audio_only(message)
+
+    @commands.Cog.listener()
+    async def on_message_edit(self, before: discord.Message, after: discord.Message):
+        await self._enforce_audio_only(after)
