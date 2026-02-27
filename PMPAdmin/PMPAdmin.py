@@ -33,6 +33,7 @@ CHANNEL_ID_INTRO = 1173461536031907962
 CHANNEL_ID_JOURNAL = 1264661701446598658
 CHANNEL_ID_MODS = 1172413634278854676
 CHANNEL_ID_PRODUCTION_FEEDBACK = 1173461620823961650
+CHANNEL_ID_ROLE_ASSIGNMENT = 1436888687110524969
 CHANNEL_ID_QOTD = 1319161247576363048
 CHANNEL_ID_REASON = 1330293070176059392
 CHANNEL_ID_REMINDER = 1343433464116150373
@@ -52,11 +53,11 @@ URL_DISCORD_JOIN = "https://discord.gg/dxBQgPU9Vn"
 #
 UNVERIFIED_HEADER = f"""**🔔Unverified Members Reminder:**
 To become a verified member, please:
-1. Fill out our Google Form ({URL_ONBOARDING}).
+1. Fill out our welcome form ({URL_ONBOARDING}).
 2. Post an introduction in <#{CHANNEL_ID_INTRO}>.
-3. Wait patiently for a moderator to verify you, this is a manual process and can sometimes take a few days.
+3. Mark your genres, tools, and skills in <#{CHANNEL_ID_ROLE_ASSIGNMENT}>
 
-If these steps aren't completed, we'll need to remove you from the server to keep things running smoothly. We hope you'll stick around!
+The above steps help keep this community tight-knit, useful, and filled with positive people who want to grow together.
 """
 
 DM_MESSAGE_5 = f"""**Hey there—welcome to Portland Music Producers!**
