@@ -53,7 +53,7 @@ URL_DISCORD_JOIN = "https://discord.gg/dxBQgPU9Vn"
 #
 UNVERIFIED_HEADER = f"""**🔔Unverified Members Reminder:**
 To become a verified member, please:
-1. Fill out our (welcome form)]{URL_ONBOARDING}].
+1. Fill out our (welcome form)[{URL_ONBOARDING}].
 2. Post an introduction in <#{CHANNEL_ID_INTRO}>.
 3. Mark your genres, tools, and skills in <#{CHANNEL_ID_ROLE_ASSIGNMENT}>
 
