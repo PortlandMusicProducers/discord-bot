@@ -68,9 +68,10 @@ Here's a glimpse of what we've got going on:
 * **In-Person Meetups** - Every month, at local recording studios.
 * **Collaborations & Challenges** - Join weekly creative <#{CHANNEL_ID_CHALLENGES}>, share song ideas, or remix a fellow member's track!
 
-**Two Steps to Join the Fun** (Complete within 5 days):
+**Three Steps to Join the Fun** (Complete within 5 days):
 1. Fill out our welcome form ({URL_ONBOARDING}).
 2. Post your intro in <#{CHANNEL_ID_INTRO}>.
+3. Mark your genres, tools, and skills in <#{CHANNEL_ID_ROLE_ASSIGNMENT}>
 
 This helps us keep the community filled with folks who are passionate about growing and supporting each other, and gather everyone's needs so we can offer helpful events, tips, and collabs. We can't wait to see you dive in!
 ♥ Portland Music Producers ♥"""
@@ -79,6 +80,7 @@ DM_MESSAGE_4 = f"""**Hey again!**
 We hope you're settling in. Just a quick reminder to:
 1. Complete our welcome form  ({URL_ONBOARDING}).
 2. Share a bit about yourself in <#{CHANNEL_ID_INTRO}>.
+3. Mark your genres, tools, and skills in <#{CHANNEL_ID_ROLE_ASSIGNMENT}>
 
 Once you're a verified member the locked collaboration & feedback channels will open up for you:
 * <#{CHANNEL_ID_PRODUCTION_FEEDBACK}> is a safe space to share WIPs, and get constructive critiques to level up your productions.
@@ -128,6 +130,7 @@ Time's nearly up. If you haven't introduced yourself and filled the form, you'll
 **Verification Steps:**
 1. ({URL_ONBOARDING}).
 2. <#{CHANNEL_ID_INTRO}>.
+3. <#{CHANNEL_ID_ROLE_ASSIGNMENT}>.
 
 We truly hope you'll stick around—there's so much waiting for you in our community!"""
 
