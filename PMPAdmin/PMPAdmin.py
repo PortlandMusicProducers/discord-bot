@@ -57,7 +57,7 @@ To become a verified member, please:
 2. Post an introduction in <#{CHANNEL_ID_INTRO}>.
 3. Mark your genres, tools, and skills in <#{CHANNEL_ID_ROLE_ASSIGNMENT}>
 
-The above steps help keep this community tight-knit, useful, and filled with positive people who want to grow together.
+Once those steps are complete, an admin will manually verify you, and you will gain full access to all channels.
 """
 
 DM_MESSAGE_5 = f"""**Hey there—welcome to Portland Music Producers!**
