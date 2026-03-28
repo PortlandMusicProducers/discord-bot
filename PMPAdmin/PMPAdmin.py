@@ -67,8 +67,8 @@ UNVERIFIED_DM = f"""
 This Discord is the home base for our community — a place to connect, grow, and actually finish music.
 
 **Activities**:
-* **[Weekly Touchbase](https://discord.com/events/1172411527870034000/1381835513400393799)** – What you're working on + life updates | 🗓️Every Wednesday at 7p.
-* **[Lyric Writing Circle](https://discord.com/events/1172411527870034000/1380957155011596410)** – Sharpen your writing with guided exercises | 🗓️Every Saturday at 10a.
+* **[Weekly Touchbase](<https://discord.com/events/1172411527870034000/1381835513400393799>)** – What you're working on + life updates | 🗓️Every Wednesday at 7p.
+* **[Lyric Writing Circle](<https://discord.com/events/1172411527870034000/1380957155011596410>)** – Sharpen your writing with guided exercises | 🗓️Every Saturday at 10a.
 * **Challenges** – Join and suggest creative #🎢challenges (e.g. “Make a song using food sounds”). 
 * **In-Person Meetups** – Real humans, real studios!
 
