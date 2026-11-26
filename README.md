@@ -8,9 +8,51 @@ python -m unittest -v
 ```
 
 The suite covers role assignment, onboarding, audio moderation, message export,
-challenge summaries, and YouTube playlists. It uses temporary files and mocks
-for external services, so it runs without Discord or Google credentials.
+challenge summaries, YouTube playlists, and Supabase sync. It uses temporary files and mocks
+for external services, so it runs without Discord, Google, or Supabase credentials.
 GitHub Actions runs the same suite on pushes and pull requests.
+
+# Supabase member-role sync
+
+The bot mirrors the Portland Music Producers Discord server to Supabase every
+night at midnight Pacific time (`America/Los_Angeles`). Discord is the source
+of truth, so roles assigned by reactions, moderators, and other bots are all
+included. The implicit `@everyone` role is excluded. The sync stores member IDs
+and assigned role IDs and names. Each successful run reflects removed roles
+and members who left the server.
+
+1. In the Supabase project's **SQL Editor**, run [the member sync SQL](supabase/member_sync.sql).
+   Leave the Data API enabled with `public` exposed.
+2. Copy the **Project URL** from the project's **Connect** dialog and create a
+   dedicated **Secret key** under **Settings → API Keys**. Put both values in
+   the deployment host's `.env` file next to `docker-compose.yml`, or set them
+   through your host's secret manager. The repository ignores `.env`. Keep the
+   key on the bot host.
+
+   ```dotenv
+   SUPABASE_URL=https://<project-ref>.supabase.co
+   SUPABASE_SECRET_KEY=<sb_secret_key>
+   ```
+
+3. Add these two entries under the Compose service's existing `environment:`
+   list so the container receives the values. Recreate the container with
+   `docker compose up -d --force-recreate redbot` after deploying the updated cog.
+
+   ```yaml
+   - SUPABASE_URL=${SUPABASE_URL}
+   - SUPABASE_SECRET_KEY=${SUPABASE_SECRET_KEY}
+   ```
+
+4. Enable **Server Members Intent** for the bot in the Discord Developer Portal
+   and in Red's active intents. Run `!supabasesync` as the bot owner to check
+   the setup immediately, then inspect `pmp_discord_member_roles` in Supabase.
+   If the bot is offline at midnight, run the same command to catch up.
+
+`pmp_discord_member_roles` has one row per member and assigned role. Filter by
+`role_id` to find everyone with a role, even if its name changes. The
+`pmp_discord_members` table includes members with zero assigned roles and records
+the snapshot time in `synced_at`. Both tables are restricted to server-side
+access by the supplied SQL.
 
 # Docker Stuff
 # open a shell in the running container

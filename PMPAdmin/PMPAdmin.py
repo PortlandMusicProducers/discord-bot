@@ -11,6 +11,7 @@ DDAY_DATE = datetime(2025, 2, 24, 0, 0, 0, tzinfo=timezone.utc)
 
 LA_TZ = ZoneInfo("America/Los_Angeles")
 DATE_DAILY_SCHEDULE = time(hour=9, minute=0, tzinfo=LA_TZ)
+PMP_GUILD_ID = 1172411527870034000
 
 #
 # ROLE IDs
@@ -130,7 +131,7 @@ class PMPAdmin(commands.Cog):
         self.dailyCheck.start()
     
     def get_guild(self):
-        return self.bot.get_guild(1172411527870034000)
+        return self.bot.get_guild(PMP_GUILD_ID)
     
     def cog_unload(self):
         self.dailyCheck.cancel()
