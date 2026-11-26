@@ -1,3 +1,17 @@
+# Tests
+
+From the repository root, use a Python 3.11 virtual environment and run:
+
+```sh
+python -m pip install -r requirements-test.txt
+python -m unittest -v
+```
+
+The suite covers role assignment, onboarding, audio moderation, message export,
+challenge summaries, and YouTube playlists. It uses temporary files and mocks
+for external services, so it runs without Discord or Google credentials.
+GitHub Actions runs the same suite on pushes and pull requests.
+
 # Docker Stuff
 # open a shell in the running container
 docker compose exec redbot /bin/bash

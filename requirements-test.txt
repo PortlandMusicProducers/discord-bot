@@ -1,0 +1,4 @@
+Red-DiscordBot==3.5.24
+google-api-python-client
+google-auth-oauthlib
+tzdata
